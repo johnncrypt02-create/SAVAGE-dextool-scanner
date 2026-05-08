@@ -24,13 +24,9 @@ COOKIE_SAMESITE = 'lax' if LOCAL_FRONTEND else 'none'
 
 
 def _frontend_origin(request: Request) -> str:
-    proto = request.headers.get('x-forwarded-proto')
-    host = request.headers.get('x-forwarded-host')
-    if proto and host:
-        return f'{proto}://{host}'
-    origin = request.headers.get('origin')
-    if origin:
-        return origin.rstrip('/')
+    proxied_origin = request.headers.get('x-savage-frontend-origin')
+    if proxied_origin:
+        return proxied_origin.rstrip('/')
     return FRONTEND_URL
 
 
